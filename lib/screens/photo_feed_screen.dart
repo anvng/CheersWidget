@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 class PhotoFeedScreen extends StatelessWidget {
+  const PhotoFeedScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,8 +13,16 @@ class PhotoFeedScreen extends StatelessWidget {
       body: FutureBuilder<List<Photo>>(
         future: DatabaseHelper.instance.getPhotos(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data!.isEmpty) {
+            return const Center(child: Text('No photos available.'));
           }
 
           return GridView.builder(

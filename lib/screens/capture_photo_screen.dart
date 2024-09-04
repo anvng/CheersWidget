@@ -14,18 +14,50 @@ class CapturePhotoScreen extends StatefulWidget {
 class _CapturePhotoScreenState extends State<CapturePhotoScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late List<CameraDescription> cameras;
   bool _isFlashOn = false;
-
-  get cameras => null;
+  CameraDescription? _selectedCamera;
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(
-      cameras[0], // Assuming first camera is back camera
-      ResolutionPreset.high,
-    );
-    _initializeControllerFuture = _controller.initialize();
+    _initializeCameras();
+  }
+
+  Future<void> _initializeCameras() async {
+    try {
+      cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        throw Exception('No cameras available');
+      }
+
+      _selectedCamera = cameras[0]; // Default to the first camera
+
+      _controller = CameraController(
+        _selectedCamera!,
+        ResolutionPreset.high,
+      );
+      _initializeControllerFuture = _controller.initialize();
+      setState(() {});
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error initializing cameras: $e');
+      }
+      // Show an error message or redirect user as needed
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Camera Error'),
+          content: Text('Failed to initialize cameras: $e'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -63,13 +95,19 @@ class _CapturePhotoScreenState extends State<CapturePhotoScreen> {
   }
 
   void _switchCamera() {
-    setState(() {
-      _controller = CameraController(
-        cameras[1], // Switch to the other camera (front/back)
-        ResolutionPreset.high,
-      );
-      _initializeControllerFuture = _controller.initialize();
-    });
+    if (cameras.isNotEmpty) {
+      setState(() {
+        final newIndex =
+            (cameras.indexOf(_selectedCamera!) + 1) % cameras.length;
+        _selectedCamera = cameras[newIndex];
+
+        _controller = CameraController(
+          _selectedCamera!,
+          ResolutionPreset.high,
+        );
+        _initializeControllerFuture = _controller.initialize();
+      });
+    }
   }
 
   @override
@@ -93,6 +131,8 @@ class _CapturePhotoScreenState extends State<CapturePhotoScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return CameraPreview(_controller);
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return const Center(child: CircularProgressIndicator());
           }
