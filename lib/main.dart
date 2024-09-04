@@ -12,18 +12,22 @@ void main() {
 class CheersWidget extends StatelessWidget {
   const CheersWidget({super.key});
 
-  get appTheme => null;
+  get appTheme => ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Locket Widget App',
+      debugShowCheckedModeBanner: false,
+      title: 'Cheers Widget',
       theme: appTheme,
       initialRoute: '/',
       routes: {
-        '/': (context) => PhotoFeedScreen(),
+        '/': (context) => const PhotoFeedScreen(),
         '/capture_photo': (context) => const CapturePhotoScreen(),
-        '/friends_list': (context) => FriendsListScreen(),
+        '/friends_list': (context) => const FriendsListScreen(),
         '/edit_profile': (context) => const EditProfileScreen(),
         '/personal_page': (context) => PersonalPageScreen(),
       },

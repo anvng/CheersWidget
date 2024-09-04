@@ -19,8 +19,7 @@ class PersonalPageScreen extends StatelessWidget {
             children: [
               const CircleAvatar(
                 radius: 50,
-                backgroundImage:
-                    AssetImage('assets/images/default_profile.png'),
+                backgroundImage: AssetImage('lib/assets/images/add.png'),
               ),
               const SizedBox(height: 20),
               Text(user.name, style: const TextStyle(fontSize: 24)),

@@ -5,7 +5,8 @@ class CommentWidget extends StatelessWidget {
   final Comment comment;
   final Function onDelete;
 
-  CommentWidget({required this.comment, required this.onDelete});
+  const CommentWidget(
+      {super.key, required this.comment, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class CommentWidget extends StatelessWidget {
       title: Text(comment.content),
       subtitle: Text(comment.timestamp.toString()),
       trailing: IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () => onDelete(comment.id),
       ),
     );

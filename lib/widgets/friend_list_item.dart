@@ -11,7 +11,8 @@ class FriendListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: AssetImage(user.profileImage ?? 'assets/images/'),
+        backgroundImage:
+            AssetImage(user.profileImage ?? 'lib/assets/images/add.png'),
       ),
       title: Text(user.name),
       subtitle: Text(user.phoneNumber),
