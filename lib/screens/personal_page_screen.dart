@@ -3,6 +3,8 @@ import 'package:cheers_widget/services/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class PersonalPageScreen extends StatelessWidget {
+  const PersonalPageScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
