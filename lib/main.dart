@@ -3,6 +3,8 @@ import 'package:cheers_widget/screens/edit_profile_screen.dart';
 import 'package:cheers_widget/screens/friends_list_screen.dart';
 import 'package:cheers_widget/screens/personal_page_screen.dart';
 import 'package:cheers_widget/screens/photo_feed_screen.dart';
+import 'package:cheers_widget/screens/login_screen.dart';
+import 'package:cheers_widget/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,10 +28,12 @@ class CheersWidget extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const PhotoFeedScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegistrationScreen(),
         '/capture_photo': (context) => const CapturePhotoScreen(),
         '/friends_list': (context) => const FriendsListScreen(),
         '/edit_profile': (context) => const EditProfileScreen(),
-        '/personal_page': (context) => PersonalPageScreen(),
+        '/personal_page': (context) => const PersonalPageScreen(),
       },
     );
   }

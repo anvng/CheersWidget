@@ -3,13 +3,45 @@ import 'package:cheers_widget/services/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-class PhotoFeedScreen extends StatelessWidget {
+class PhotoFeedScreen extends StatefulWidget {
   const PhotoFeedScreen({super.key});
+
+  @override
+  _PhotoFeedScreenState createState() => _PhotoFeedScreenState();
+}
+
+class _PhotoFeedScreenState extends State<PhotoFeedScreen> {
+  // Track the currently highlighted button
+  int _selectedIndex = -1;
+
+  // Method to handle button presses
+  void _onButtonPressed(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/personal_page');
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/capture_photo');
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/friends_list');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/login');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Photo Feed')),
+      appBar: AppBar(
+        title: const Text('Photo Feed'),
+      ),
       body: FutureBuilder<List<Photo>>(
         future: DatabaseHelper.instance.getPhotos(),
         builder: (context, snapshot) {
@@ -44,9 +76,27 @@ class PhotoFeedScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/capture_photo'),
-        child: const Icon(Icons.add_a_photo),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(4, (index) {
+            final isSelected = index == _selectedIndex;
+            return IconButton(
+              icon: Icon(
+                index == 0
+                    ? Icons.manage_accounts
+                    : index == 1
+                        ? Icons.camera
+                        : index == 2
+                            ? Icons.person_add
+                            : Icons.login,
+                color: isSelected ? Colors.blue : Colors.grey,
+                size: isSelected ? 30.0 : 24.0,
+              ),
+              onPressed: () => _onButtonPressed(index),
+            );
+          }),
+        ),
       ),
     );
   }
